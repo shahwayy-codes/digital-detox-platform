@@ -15,7 +15,20 @@
         </form>
     </div>
     <p>You are logged in as <strong th:text="${user.email}">email</strong>.</p>
-    <p>Challenges, check-ins and streaks will appear here as we build them.</p>
+
+    <h2>My challenges</h2>
+    <p th:if="${participations.isEmpty()}">You have not joined any challenge yet.</p>
+
+    <div class="card" th:each="p : ${participations}">
+        <div class="card-head">
+            <h3 th:text="${p.challenge.title}">Title</h3>
+            <span class="badge" th:text="${p.status}">ACTIVE</span>
+        </div>
+        <p class="meta"><span th:text="${p.challenge.durationDays}">7</span> days</p>
+        <a class="btn small" th:href="@{/challenges/{id}(id=${p.challenge.id})}">View</a>
+    </div>
+
+    <a class="btn" th:href="@{/challenges}">Browse challenges</a>
 </div>
 </body>
 </html>

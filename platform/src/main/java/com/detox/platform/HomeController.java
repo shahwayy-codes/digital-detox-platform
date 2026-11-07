@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private final UserRepository userRepository;
+    private final ParticipationRepository participationRepository;
 
-    public HomeController(UserRepository userRepository) {
+    public HomeController(UserRepository userRepository, ParticipationRepository participationRepository) {
         this.userRepository = userRepository;
+        this.participationRepository = participationRepository;
     }
 
     @GetMapping("/")
@@ -23,6 +25,7 @@ public class HomeController {
     public String dashboard(Principal principal, Model model) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow();
         model.addAttribute("user", user);
+        model.addAttribute("participations", participationRepository.findByUser(user));
         return "dashboard";
     }
 }

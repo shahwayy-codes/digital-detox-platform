@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Challenges</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Challenges</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <form class="filter" th:action="@{/challenges}" method="get">
+        <input type="text" name="q" th:value="${q}" placeholder="Search challenges">
+        <select name="category">
+            <option value="">All categories</option>
+            <option th:each="c : ${categories}" th:value="${c}" th:text="${c}" th:selected="${c == selectedCategory}"></option>
+        </select>
+        <button type="submit" class="btn small">Search</button>
+    </form>
+
+    <p th:if="${challenges.isEmpty()}">No challenges match your search.</p>
+
+    <div class="card" th:each="ch : ${challenges}">
+        <div class="card-head">
+            <h2 th:text="${ch.title}">Title</h2>
+            <span class="badge" th:text="${ch.category}">Category</span>
+        </div>
+        <p th:text="${ch.description}">Description</p>
+        <p class="meta"><span th:text="${ch.durationDays}">7</span> days</p>
+        <a class="btn small" th:href="@{/challenges/{id}(id=${ch.id})}">View details</a>
+        <span class="badge joined" th:if="${joinedIds.contains(ch.id)}">Joined</span>
+    </div>
+</div>
+</body>
+</html>
