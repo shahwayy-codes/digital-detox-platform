@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Welcome, <span th:text="${user.fullName}">Name</span></h1>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn small">Log out</button>
+        </form>
+    </div>
+    <p>You are logged in as <strong th:text="${user.email}">email</strong>.</p>
+    <p>Challenges, check-ins and streaks will appear here as we build them.</p>
+</div>
+</body>
+</html>
