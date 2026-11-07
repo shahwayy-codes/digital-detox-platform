@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check-in history</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Check-in history</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${total}">0</strong>Check-ins</div>
+        <div class="stat"><strong th:text="${avgMinutes}">0</strong>Avg screen time (min)</div>
+    </div>
+
+    <p th:if="${checkIns.isEmpty()}">No check-ins yet. Do your first one today.</p>
+
+    <table th:if="${!checkIns.isEmpty()}">
+        <thead>
+            <tr><th>Date</th><th>Challenge</th><th>Goal</th><th>Screen time</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${checkIns}">
+                <td th:text="${c.checkInDate}">date</td>
+                <td th:text="${c.participation.challenge.title}">challenge</td>
+                <td>
+                    <span class="badge" th:if="${c.goalMet}">Met</span>
+                    <span class="badge no" th:if="${!c.goalMet}">Missed</span>
+                </td>
+                <td><span th:text="${c.screenTimeMinutes}">0</span> min</td>
+                <td th:text="${c.note}">note</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn" th:href="@{/checkin}">Go to daily check-in</a>
+</div>
+</body>
+</html>
