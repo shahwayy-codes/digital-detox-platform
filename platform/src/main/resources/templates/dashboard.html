@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Welcome, <span th:text="${user.fullName}">Name</span></h1>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn small">Log out</button>
+        </form>
+    </div>
+    <p>You are logged in as <strong th:text="${user.email}">email</strong>.</p>
+
+    <h2>My challenges</h2>
+    <p th:if="${participations.isEmpty()}">You have not joined any challenge yet.</p>
+
+    <div class="card" th:each="p : ${participations}">
+        <div class="card-head">
+            <h3 th:text="${p.challenge.title}">Title</h3>
+            <span class="badge" th:text="${p.status}">ACTIVE</span>
+        </div>
+        <p class="meta"><span th:text="${p.challenge.durationDays}">7</span> days</p>
+        <a class="btn small" th:href="@{/challenges/{id}(id=${p.challenge.id})}">View</a>
+    </div>
+
+    <a class="btn" th:href="@{/checkin}">Daily check-in</a>
+    <a class="btn light" th:href="@{/history}">Check-in history</a>
+    <a class="btn light" th:href="@{/challenges}">Browse challenges</a>
+</div>
+</body>
+</html>

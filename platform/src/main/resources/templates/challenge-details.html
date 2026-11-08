@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Challenge details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1 th:text="${challenge.title}">Title</h1>
+        <a class="btn small light" th:href="@{/challenges}">All challenges</a>
+    </div>
+
+    <p><span class="badge" th:text="${challenge.category}">Category</span></p>
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+
+    <p th:text="${challenge.description}">Description</p>
+
+    <h3>Daily goal</h3>
+    <p th:text="${challenge.dailyGoal}">Goal</p>
+
+    <p class="meta">
+        Duration: <strong th:text="${challenge.durationDays}">7</strong> days
+        &middot; Participants: <strong th:text="${participants}">0</strong>
+    </p>
+
+    <form th:if="${!joined}" th:action="@{/challenges/{id}/join(id=${challenge.id})}" method="post">
+        <button type="submit" class="btn">Join this challenge</button>
+    </form>
+    <div class="alert success" th:if="${joined}">You are part of this challenge.</div>
+</div>
+</body>
+</html>

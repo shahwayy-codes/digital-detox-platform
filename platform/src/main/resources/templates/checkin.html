@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daily check-in</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Daily check-in</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+    <p class="meta">Today: <span th:text="${today}">2026-01-01</span></p>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <div th:if="${participations.isEmpty()}">
+        <p>You have not joined any challenge yet.</p>
+        <a class="btn" th:href="@{/challenges}">Browse challenges</a>
+    </div>
+
+    <div class="card" th:each="p : ${participations}" th:with="done=${todayMap.get(p.id)}">
+        <h3 th:text="${p.challenge.title}">Title</h3>
+        <p class="meta">Daily goal: <span th:text="${p.challenge.dailyGoal}">Goal</span></p>
+
+        <div class="alert success" th:if="${done != null}">
+            Checked in today. Goal
+            <strong th:text="${done.goalMet ? 'met' : 'not met'}">met</strong>,
+            screen time <strong th:text="${done.screenTimeMinutes}">0</strong> minutes.
+        </div>
+
+        <form th:if="${done == null}" th:action="@{/checkin/{id}(id=${p.id})}" method="post">
+            <label>Did you meet today's goal?</label>
+            <label class="inline"><input type="radio" name="goalMet" value="true" required> Yes</label>
+            <label class="inline"><input type="radio" name="goalMet" value="false" required> No</label>
+
+            <label>Screen time today (minutes)</label>
+            <input type="number" name="screenTimeMinutes" min="0" max="1440" required>
+
+            <label>Note (optional)</label>
+            <input type="text" name="note" maxlength="300">
+
+            <button type="submit" class="btn">Save check-in</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
