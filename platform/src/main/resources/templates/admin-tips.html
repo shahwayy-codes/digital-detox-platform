@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: tips</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Admin: tips and ideas</h1>
+        <a class="btn small light" th:href="@{/admin/challenges}">Admin: challenges</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <h2>Add new</h2>
+    <form th:action="@{/admin/tips}" method="post">
+        <label for="tipType">Type</label>
+        <select id="tipType" name="tipType">
+            <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+        </select>
+
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" minlength="3" maxlength="100" required>
+
+        <label for="content">Text</label>
+        <textarea id="content" name="content" rows="3" minlength="10" maxlength="600" required></textarea>
+
+        <button type="submit" class="btn">Add</button>
+    </form>
+
+    <h2 style="margin-top:28px;">All tips and ideas</h2>
+    <table>
+        <thead>
+            <tr><th>Type</th><th>Title</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="t : ${tips}">
+                <td th:text="${t.tipType}">Tip</td>
+                <td th:text="${t.title}">Title</td>
+                <td>
+                    <form th:action="@{/admin/tips/{id}/delete(id=${t.id})}" method="post">
+                        <button type="submit" class="btn small danger"
+                                onclick="return confirm('Delete this item?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

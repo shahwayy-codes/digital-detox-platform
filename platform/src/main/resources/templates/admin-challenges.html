@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: challenges</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Admin: challenges</h1>
+        <div class="actions">
+            <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+            <a class="btn small light" th:href="@{/admin/comments}">Reported comments</a>
+            <a class="btn small light" th:href="@{/admin/tips}">Tips</a>
+            <a class="btn small light" th:href="@{/admin/users}">Users</a>
+            <a class="btn small light" th:href="@{/admin/resets}">Password resets</a>
+            <a class="btn small" th:href="@{/admin/challenges/new}">Add challenge</a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${userCount}">0</strong>Users</div>
+        <div class="stat"><strong th:text="${challengeCount}">0</strong>Challenges</div>
+        <div class="stat"><strong th:text="${joinCount}">0</strong>Joins</div>
+        <div class="stat"><strong th:text="${checkInCount}">0</strong>Check-ins</div>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <table>
+        <thead>
+            <tr><th>Title</th><th>Category</th><th>Days</th><th>Joined</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${challenges}">
+                <td th:text="${c.title}">Title</td>
+                <td th:text="${c.category}">Category</td>
+                <td th:text="${c.durationDays}">7</td>
+                <td th:text="${counts.get(c.id)}">0</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn small light" th:href="@{/admin/challenges/{id}/edit(id=${c.id})}">Edit</a>
+                        <form th:action="@{/admin/challenges/{id}/delete(id=${c.id})}" method="post">
+                            <button type="submit" class="btn small danger"
+                                    onclick="return confirm('Delete this challenge?');">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

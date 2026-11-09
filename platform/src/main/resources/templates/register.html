@@ -7,11 +7,10 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container">
+<div class="container auth">
+    <a class="brand center" th:href="@{/}"><span class="logo"></span><span>Detox</span></a>
     <h1>Create account</h1>
-
     <form th:action="@{/register}" th:object="${registerForm}" method="post">
-
         <label for="fullName">Full name</label>
         <input type="text" id="fullName" th:field="*{fullName}">
         <p class="error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></p>
@@ -30,7 +29,6 @@
 
         <button type="submit" class="btn">Register</button>
     </form>
-
     <p class="link-row">Already have an account? <a th:href="@{/login}">Log in</a></p>
 </div>
 </body>

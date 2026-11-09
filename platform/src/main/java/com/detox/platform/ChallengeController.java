@@ -18,13 +18,16 @@ public class ChallengeController {
     private final ChallengeRepository challengeRepository;
     private final ParticipationRepository participationRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public ChallengeController(ChallengeRepository challengeRepository,
                                ParticipationRepository participationRepository,
-                               UserRepository userRepository) {
+                               UserRepository userRepository,
+                               CommentRepository commentRepository) {
         this.challengeRepository = challengeRepository;
         this.participationRepository = participationRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     private User currentUser(Principal principal) {
@@ -78,6 +81,9 @@ public class ChallengeController {
         model.addAttribute("challenge", challenge);
         model.addAttribute("joined", participationRepository.existsByUserAndChallenge(user, challenge));
         model.addAttribute("participants", participationRepository.countByChallenge(challenge));
+        model.addAttribute("comments", commentRepository.findByChallengeOrderByCreatedAtDesc(challenge));
+        model.addAttribute("currentUserId", user.getId());
+        model.addAttribute("isAdmin", "ROLE_ADMIN".equals(user.getRole()));
         return "challenge-details";
     }
 

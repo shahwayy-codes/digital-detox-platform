@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: users</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Admin: user accounts</h1>
+        <a class="btn small light" th:href="@{/admin/challenges}">Admin: challenges</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.fullName}">Name</td>
+                <td th:text="${u.email}">email</td>
+                <td th:text="${u.role == 'ROLE_ADMIN'} ? 'Admin' : 'User'">User</td>
+                <td>
+                    <span class="badge" th:if="${u.enabled}">Active</span>
+                    <span class="badge no" th:if="${!u.enabled}">Disabled</span>
+                </td>
+                <td>
+                    <form th:if="${u.role != 'ROLE_ADMIN'}" th:action="@{/admin/users/{id}/toggle(id=${u.id})}" method="post">
+                        <button type="submit" class="btn small light"
+                                th:text="${u.enabled} ? 'Disable' : 'Enable'">Disable</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

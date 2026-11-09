@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="navbar(active)">
+    <header class="appbar">
+        <div class="appbar-inner">
+            <a class="brand" th:href="@{/dashboard}"><span class="logo"></span><span>Detox</span></a>
+
+            <nav class="tabs desktop">
+                <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+                <a th:href="@{/challenges}" th:classappend="${active == 'challenges'} ? 'active'">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Challenges</a>
+                <a th:href="@{/checkin}" th:classappend="${active == 'checkin'} ? 'active'">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Check-in</a>
+                <a th:href="@{/progress}" th:classappend="${active == 'progress'} ? 'active'">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/></svg>Progress</a>
+                <a th:href="@{/groups}" th:classappend="${active == 'groups'} ? 'active'">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.6c1.8.8 3 2.6 3 5.4"/></svg>Groups</a>
+            </nav>
+
+            <details class="usermenu" th:if="${navUser != null}">
+                <summary>
+                    <span class="avatar" th:text="${#strings.toUpperCase(#strings.substring(navUser.fullName, 0, 1))}">A</span>
+                </summary>
+                <div class="menu">
+                    <div class="menu-head">
+                        <strong th:text="${navUser.fullName}">Name</strong>
+                        <span th:text="${navUser.email}">email</span>
+                    </div>
+                    <a th:href="@{/achievements}">Badges and points</a>
+                    <a th:href="@{/reflections}">Reflections</a>
+                    <a th:href="@{/history}">Check-in history</a>
+                    <a th:href="@{/tips}">Tips and offline ideas</a>
+                    <a th:href="@{/profile}">My profile</a>
+                    <a th:if="${navUser.role == 'ROLE_ADMIN'}" th:href="@{/admin/challenges}">Admin panel</a>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="menu-logout">Log out</button>
+                    </form>
+                </div>
+            </details>
+        </div>
+    </header>
+
+    <nav class="tabs mobile">
+        <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></a>
+        <a th:href="@{/challenges}" th:classappend="${active == 'challenges'} ? 'active'">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span>Challenges</span></a>
+        <a th:href="@{/checkin}" th:classappend="${active == 'checkin'} ? 'active'">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Check-in</span></a>
+        <a th:href="@{/progress}" th:classappend="${active == 'progress'} ? 'active'">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/></svg><span>Progress</span></a>
+        <a th:href="@{/groups}" th:classappend="${active == 'groups'} ? 'active'">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.6c1.8.8 3 2.6 3 5.4"/></svg><span>Groups</span></a>
+    </nav>
+
+    <script th:src="@{/js/app.js}" defer></script>
+</th:block>
+</body>
+</html>

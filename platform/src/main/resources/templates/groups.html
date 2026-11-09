@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Friend groups</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('groups')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Friend groups</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <h2>My groups</h2>
+    <p th:if="${memberships.isEmpty()}">You are not in any group yet. Create one or join with a code.</p>
+
+    <div class="card" th:each="m : ${memberships}">
+        <div class="card-head">
+            <h3 th:text="${m.group.name}">Group</h3>
+            <span class="badge"><span th:text="${counts.get(m.group.id)}">1</span> members</span>
+        </div>
+        <a class="btn small" th:href="@{/groups/{id}(id=${m.group.id})}">Open leaderboard</a>
+    </div>
+
+    <h2 style="margin-top:24px;">Create a group</h2>
+    <form th:action="@{/groups/create}" method="post">
+        <label for="name">Group name</label>
+        <input type="text" id="name" name="name" minlength="3" maxlength="40" required>
+        <button type="submit" class="btn">Create group</button>
+    </form>
+
+    <h2 style="margin-top:24px;">Join with a code</h2>
+    <form th:action="@{/groups/join}" method="post">
+        <label for="code">Invite code</label>
+        <input type="text" id="code" name="code" maxlength="10" required>
+        <button type="submit" class="btn light">Join group</button>
+    </form>
+</div>
+</body>
+</html>

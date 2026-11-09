@@ -28,6 +28,10 @@ public class Challenge {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitle() { return title; }
@@ -40,6 +44,8 @@ public class Challenge {
     public void setCategory(String category) { this.category = category; }
     public int getDurationDays() { return durationDays; }
     public void setDurationDays(int durationDays) { this.durationDays = durationDays; }
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

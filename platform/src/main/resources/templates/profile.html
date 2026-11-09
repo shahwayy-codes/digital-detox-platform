@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My profile</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>My profile</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <h2>Details</h2>
+    <form th:action="@{/profile}" method="post">
+        <label for="email">Email</label>
+        <input type="email" id="email" th:value="${user.email}" disabled>
+
+        <label for="fullName">Full name</label>
+        <input type="text" id="fullName" name="fullName" th:value="${user.fullName}" maxlength="60" required>
+
+        <label for="dailyGoalMinutes">Daily screen time goal (minutes, optional)</label>
+        <input type="number" id="dailyGoalMinutes" name="dailyGoalMinutes"
+               th:value="${user.dailyScreenTimeGoal}" min="1" max="1440">
+
+        <button type="submit" class="btn">Save profile</button>
+    </form>
+
+    <h2 style="margin-top:28px;">Change password</h2>
+    <form th:action="@{/profile/password}" method="post">
+        <label for="currentPassword">Current password</label>
+        <input type="password" id="currentPassword" name="currentPassword" required>
+
+        <label for="newPassword">New password (at least 8 characters)</label>
+        <input type="password" id="newPassword" name="newPassword" minlength="8" required>
+
+        <label for="confirmPassword">Confirm new password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+        <button type="submit" class="btn light">Change password</button>
+    </form>
+</div>
+</body>
+</html>

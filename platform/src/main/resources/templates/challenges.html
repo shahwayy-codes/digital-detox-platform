@@ -7,10 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:replace="~{fragments :: navbar('challenges')}"></div>
 <div class="container wide">
     <div class="topbar">
         <h1>Challenges</h1>
-        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+        <div class="actions">
+            <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+            <a class="btn small" th:href="@{/challenges/new}">Create challenge</a>
+        </div>
     </div>
 
     <form class="filter" th:action="@{/challenges}" method="get">

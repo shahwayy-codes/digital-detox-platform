@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tips and offline ideas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Tips and offline ideas</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="actions" style="margin:14px 0;">
+        <a class="btn small" th:classappend="${selectedType != ''} ? 'light'" th:href="@{/tips}">All</a>
+        <a class="btn small" th:classappend="${selectedType != 'Tip'} ? 'light'" th:href="@{/tips(type='Tip')}">Tips</a>
+        <a class="btn small" th:classappend="${selectedType != 'Offline idea'} ? 'light'" th:href="@{/tips(type='Offline idea')}">Offline ideas</a>
+    </div>
+
+    <p th:if="${tips.isEmpty()}">Nothing here yet.</p>
+
+    <div class="card" th:each="t : ${tips}">
+        <div class="card-head">
+            <h3 th:text="${t.title}">Title</h3>
+            <span class="badge" th:text="${t.tipType}">Tip</span>
+        </div>
+        <p th:text="${t.content}">Text</p>
+    </div>
+</div>
+</body>
+</html>

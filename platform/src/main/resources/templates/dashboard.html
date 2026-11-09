@@ -7,17 +7,32 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container wide">
-    <div class="topbar">
-        <h1>Welcome, <span th:text="${user.fullName}">Name</span></h1>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="btn small">Log out</button>
-        </form>
+<div th:replace="~{fragments :: navbar('dashboard')}"></div>
+<main class="container wide">
+
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Welcome back</p>
+            <h1>Hi, <span th:text="${user.fullName}">Name</span></h1>
+            <p class="hero-sub">Spend less time on your screen, one day at a time.</p>
+            <p class="hero-sub" th:if="${user.dailyScreenTimeGoal != null}">
+                Daily screen time goal: <strong th:text="${user.dailyScreenTimeGoal}">180</strong> min
+                &middot; <a th:href="@{/profile}">change</a>
+            </p>
+        </div>
+        <a class="btn" th:href="@{/checkin}">Daily check-in</a>
+    </section>
+
+    <div class="alert warn" th:if="${pendingCheckIns > 0}">
+        Reminder: <strong th:text="${pendingCheckIns}">1</strong> of your challenges is waiting for today's check-in.
+        <a th:href="@{/checkin}">Check in now</a>
     </div>
-    <p>You are logged in as <strong th:text="${user.email}">email</strong>.</p>
 
     <h2>My challenges</h2>
-    <p th:if="${participations.isEmpty()}">You have not joined any challenge yet.</p>
+    <div class="empty" th:if="${participations.isEmpty()}">
+        <p>You have not joined any challenge yet.</p>
+        <a class="btn small" th:href="@{/challenges}">Browse challenges</a>
+    </div>
 
     <div class="card" th:each="p : ${participations}">
         <div class="card-head">
@@ -28,9 +43,18 @@
         <a class="btn small" th:href="@{/challenges/{id}(id=${p.challenge.id})}">View</a>
     </div>
 
-    <a class="btn" th:href="@{/checkin}">Daily check-in</a>
-    <a class="btn light" th:href="@{/history}">Check-in history</a>
-    <a class="btn light" th:href="@{/challenges}">Browse challenges</a>
-</div>
+    <h2>Explore</h2>
+    <div class="tiles">
+        <a class="tile" th:href="@{/challenges}"><span class="emoji">🎯</span>Browse challenges</a>
+        <a class="tile" th:href="@{/progress}"><span class="emoji">📈</span>My progress and streaks</a>
+        <a class="tile" th:href="@{/achievements}"><span class="emoji">🏅</span>Badges and points</a>
+        <a class="tile" th:href="@{/groups}"><span class="emoji">👥</span>Friend groups</a>
+        <a class="tile" th:href="@{/reflections}"><span class="emoji">📝</span>Reflections</a>
+        <a class="tile" th:href="@{/tips}"><span class="emoji">💡</span>Tips and offline ideas</a>
+        <a class="tile" th:href="@{/history}"><span class="emoji">🕑</span>Check-in history</a>
+        <a class="tile" th:href="@{/profile}"><span class="emoji">⚙️</span>My profile</a>
+        <a class="tile" th:if="${isAdmin}" th:href="@{/admin/challenges}"><span class="emoji">🛠️</span>Admin panel</a>
+    </div>
+</main>
 </body>
 </html>
