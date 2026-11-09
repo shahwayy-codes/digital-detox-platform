@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: password resets</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Password reset requests</h1>
+        <a class="btn small light" th:href="@{/admin/challenges}">Admin: challenges</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <p th:if="${requests.isEmpty()}">No pending requests.</p>
+
+    <div class="card" th:each="r : ${requests}">
+        <div class="card-head">
+            <strong th:text="${r.email}">email</strong>
+            <span class="meta" th:text="${r.createdAt.toLocalDate()}">2026-01-01</span>
+        </div>
+        <div class="actions" style="margin-top:10px;">
+            <form th:action="@{/admin/resets/{id}/reset(id=${r.id})}" method="post">
+                <button type="submit" class="btn small"
+                        onclick="return confirm('Set a new temporary password for this account?');">Set temporary password</button>
+            </form>
+            <form th:action="@{/admin/resets/{id}/dismiss(id=${r.id})}" method="post">
+                <button type="submit" class="btn small light">Dismiss</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

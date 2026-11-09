@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: reported comments</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Reported comments</h1>
+        <a class="btn small light" th:href="@{/admin/challenges}">Admin: challenges</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+
+    <p th:if="${comments.isEmpty()}">No reported comments. Everything looks fine.</p>
+
+    <div class="card" th:each="c : ${comments}">
+        <div class="card-head">
+            <strong th:text="${c.user.fullName}">Author</strong>
+            <span class="badge" th:text="${c.challenge.title}">Challenge</span>
+        </div>
+        <p class="pre" th:text="${c.content}">Comment</p>
+        <div class="actions">
+            <form th:action="@{/admin/comments/{id}/dismiss(id=${c.id})}" method="post">
+                <button type="submit" class="btn small light">Dismiss report</button>
+            </form>
+            <form th:action="@{/admin/comments/{id}/remove(id=${c.id})}" method="post">
+                <button type="submit" class="btn small danger"
+                        onclick="return confirm('Remove this comment?');">Remove comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

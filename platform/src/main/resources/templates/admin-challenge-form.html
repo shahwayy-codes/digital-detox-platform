@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Challenge form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container">
+    <h1 th:text="${formTitle}">Add challenge</h1>
+
+    <form th:action="@{${formAction}}" th:object="${challengeForm}" method="post">
+
+        <label for="title">Title</label>
+        <input type="text" id="title" th:field="*{title}">
+        <p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+
+        <label for="category">Category</label>
+        <input type="text" id="category" th:field="*{category}">
+        <p class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" th:field="*{description}"></textarea>
+        <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+
+        <label for="dailyGoal">Daily goal</label>
+        <input type="text" id="dailyGoal" th:field="*{dailyGoal}">
+        <p class="error" th:if="${#fields.hasErrors('dailyGoal')}" th:errors="*{dailyGoal}"></p>
+
+        <label for="durationDays">Duration (days)</label>
+        <input type="number" id="durationDays" th:field="*{durationDays}">
+        <p class="error" th:if="${#fields.hasErrors('durationDays')}" th:errors="*{durationDays}"></p>
+
+        <button type="submit" class="btn">Save challenge</button>
+    </form>
+
+    <p class="link-row"><a th:href="@{/admin/challenges}">Cancel</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My progress</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('progress')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>My progress</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${bestCurrent}">0</strong>Current streak (days)</div>
+        <div class="stat"><strong th:text="${bestLongest}">0</strong>Longest streak (days)</div>
+        <div class="stat"><strong th:text="${totalGoalsMet}">0</strong>Goals met</div>
+        <div class="stat"><strong th:text="${totalCheckIns}">0</strong>Check-ins</div>
+    </div>
+    <p class="meta">A streak counts consecutive days on which you met the daily goal.</p>
+
+    <div th:if="${rows.isEmpty()}">
+        <p>You have not joined any challenge yet.</p>
+        <a class="btn" th:href="@{/challenges}">Browse challenges</a>
+    </div>
+
+    <div class="card" th:each="r : ${rows}">
+        <div class="card-head">
+            <h3 th:text="${r.title}">Title</h3>
+            <span class="badge" th:if="${r.checkedInToday}">Checked in today</span>
+            <a class="btn small" th:if="${!r.checkedInToday}" th:href="@{/checkin}">Check in</a>
+        </div>
+        <div class="bar"><div class="bar-fill" th:style="'width:' + ${r.percentComplete} + '%'"></div></div>
+        <p class="meta">
+            <span th:text="${r.goalsMet}">0</span> of <span th:text="${r.durationDays}">7</span> goal days
+            (<span th:text="${r.percentComplete}">0</span>%)
+        </p>
+        <p>
+            Current streak: <strong th:text="${r.currentStreak}">0</strong> days
+            &middot; Longest: <strong th:text="${r.longestStreak}">0</strong> days
+            &middot; Avg screen time: <strong th:text="${r.avgMinutes}">0</strong> min
+        </p>
+    </div>
+
+    <h2>Screen time, last 7 days</h2>
+    <p class="meta">Average minutes logged per day.</p>
+    <div class="day-row" th:each="d : ${week}">
+        <span class="day-label" th:text="${d.label}">Mon 1</span>
+        <div class="day-track"><div class="day-fill" th:style="'width:' + ${d.percent} + '%'"></div></div>
+        <span class="day-value" th:text="${d.checkedIn} ? ${d.minutes} + ' min' : 'no check-in'">0 min</span>
+    </div>
+       <form th:action="@{/progress/demo-data}" method="post">
+       <button type="submit" class="btn light">Add demo data (testing only)</button>
+   </form>
+</div>
+</body>
+</html>

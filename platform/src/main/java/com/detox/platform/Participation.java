@@ -3,6 +3,8 @@ package com.detox.platform;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.detox.platform.Challenge;
+
 @Entity
 @Table(name = "participations",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "challenge_id"}))

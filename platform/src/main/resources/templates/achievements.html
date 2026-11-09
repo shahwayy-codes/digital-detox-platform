@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Badges and points</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('progress')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Badges and points</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${a.points}">0</strong>Points</div>
+        <div class="stat"><strong th:text="${a.level}">1</strong>Level</div>
+        <div class="stat"><strong th:text="${a.earnedCount}">0</strong>Badges earned</div>
+    </div>
+
+    <div class="bar"><div class="bar-fill" th:style="'width:' + ${a.levelPercent} + '%'"></div></div>
+    <p class="meta"><span th:text="${a.pointsToNext}">50</span> points to the next level.
+        You earn 5 points per check-in, 10 more when you meet the goal, and 5 per reflection.</p>
+
+    <div class="badge-grid">
+        <div class="badge-card" th:each="b : ${a.badges}"
+             th:classappend="${b.earned} ? 'earned' : 'locked'">
+            <h3 th:text="${b.name}">Badge</h3>
+            <p class="meta" th:text="${b.description}">Description</p>
+            <span class="badge" th:text="${b.earned} ? 'Earned' : 'Locked'">Locked</span>
+        </div>
+    </div>
+
+    <a class="btn" th:href="@{/checkin}">Go to daily check-in</a>
+</div>
+</body>
+</html>
+

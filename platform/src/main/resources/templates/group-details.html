@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Group leaderboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('groups')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1 th:text="${group.name}">Group</h1>
+        <a class="btn small light" th:href="@{/groups}">All groups</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <p>Invite code: <span class="code" th:text="${group.inviteCode}">ABC123</span></p>
+    <p class="meta">Share this code with friends so they can join from the Friend groups page.</p>
+
+    <h2>Weekly leaderboard</h2>
+    <p class="meta">Last 7 days. You get 5 points per check-in, plus 10 when you meet the goal.</p>
+
+    <table>
+        <thead>
+            <tr><th>Rank</th><th>Name</th><th>Points</th><th>Check-ins</th><th>Streak</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="e : ${entries}" th:classappend="${e.you} ? 'me'">
+                <td th:text="${e.rank}">1</td>
+                <td><span th:text="${e.name}">Name</span><span th:if="${e.you}"> (you)</span></td>
+                <td th:text="${e.weeklyPoints}">0</td>
+                <td th:text="${e.weeklyCheckIns}">0</td>
+                <td><span th:text="${e.streak}">0</span> days</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form th:if="${!isOwner}" th:action="@{/groups/{id}/leave(id=${group.id})}" method="post">
+        <button type="submit" class="btn light"
+                onclick="return confirm('Leave this group?');">Leave group</button>
+    </form>
+    <form th:if="${isOwner}" th:action="@{/groups/{id}/delete(id=${group.id})}" method="post">
+        <button type="submit" class="btn danger"
+                onclick="return confirm('Delete this group for everyone?');">Delete group</button>
+    </form>
+</div>
+</body>
+</html>

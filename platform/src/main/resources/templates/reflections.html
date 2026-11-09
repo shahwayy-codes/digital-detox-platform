@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reflections</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>My reflections</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <form th:action="@{/reflections}" method="post">
+        <label for="mood">How are you feeling?</label>
+        <select id="mood" name="mood">
+            <option th:each="m : ${moods}" th:value="${m}" th:text="${m}" th:selected="${m == 'Good'}"></option>
+        </select>
+
+        <label for="content">What did you notice today?</label>
+        <textarea id="content" name="content" rows="4" maxlength="1000" required
+                  placeholder="How did the day feel without your phone?"></textarea>
+
+        <button type="submit" class="btn">Save reflection</button>
+    </form>
+
+    <h2 style="margin-top:28px;">Past reflections</h2>
+    <p th:if="${reflections.isEmpty()}">No reflections yet. Write your first one above.</p>
+
+    <div class="card" th:each="r : ${reflections}">
+        <div class="card-head">
+            <span class="meta" th:text="${r.reflectionDate}">2026-01-01</span>
+            <span class="badge" th:text="${r.mood}">Good</span>
+        </div>
+        <p class="pre" th:text="${r.content}">Text</p>
+        <form th:action="@{/reflections/{id}/delete(id=${r.id})}" method="post">
+            <button type="submit" class="btn small light"
+                    onclick="return confirm('Delete this reflection?');">Delete</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

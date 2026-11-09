@@ -7,11 +7,20 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Digital Detox Challenge</h1>
-    <p>Take on challenges, build streaks, and spend less time on your screen.</p>
-    <a class="btn" th:href="@{/register}">Create an account</a>
-    <a class="btn light" th:href="@{/login}">Log in</a>
+<div class="container auth">
+    <a class="brand center" th:href="@{/}"><span class="logo"></span><span>Detox</span></a>
+    <h1 class="big">Take back your time.</h1>
+    <p class="lead">Join detox challenges, build streaks, earn badges and compete with friends, one screen-free day at a time.</p>
+
+    <ul class="features">
+        <li>🎯 Join challenges</li>
+        <li>🔥 Build streaks</li>
+        <li>🏅 Earn badges</li>
+        <li>👥 Compete with friends</li>
+    </ul>
+
+    <a class="btn" th:href="@{/register}">Get started</a>
+    <a class="btn light" th:href="@{/login}">I already have an account</a>
 </div>
 </body>
 </html>
