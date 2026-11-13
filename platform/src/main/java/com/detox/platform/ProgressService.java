@@ -9,10 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
-import com.detox.platform.CheckIn;
-import com.detox.platform.CheckInRepository;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ProgressService {

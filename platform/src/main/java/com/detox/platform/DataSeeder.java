@@ -3,9 +3,6 @@ package com.detox.platform;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.detox.platform.Challenge;
-import com.detox.platform.ChallengeRepository;
-
 @Component
 public class DataSeeder implements CommandLineRunner {
 
