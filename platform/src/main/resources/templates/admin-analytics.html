@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin: analytics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/extras.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Admin: analytics</h1>
+        <a class="btn small light" th:href="@{/admin/challenges}">Admin: challenges</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${userCount}">0</strong>Users</div>
+        <div class="stat"><strong th:text="${checkInCount}">0</strong>Check-ins</div>
+        <div class="stat"><strong th:text="${peakUsers}">0</strong>Peak daily active users</div>
+        <div class="stat"><strong th:text="${overallAvg}">0</strong>Avg screen time (min)</div>
+    </div>
+
+    <h2>Daily active users, last <span th:text="${days}">14</span> days</h2>
+    <p class="meta">Users who did at least one check-in that day.</p>
+    <div class="day-row" th:each="p : ${points}">
+        <span class="day-label" th:text="${p.label}">Mon 1</span>
+        <div class="day-track"><div class="day-fill" th:style="'width:' + ${p.usersPercent} + '%'"></div></div>
+        <span class="day-value" th:text="${p.activeUsers} + ' users'">0</span>
+    </div>
+
+    <h2>Average screen time per day</h2>
+    <p class="meta">Average of the minutes logged in check-ins that day.</p>
+    <div class="day-row" th:each="p : ${points}">
+        <span class="day-label" th:text="${p.label}">Mon 1</span>
+        <div class="day-track"><div class="day-fill alt" th:style="'width:' + ${p.minutesPercent} + '%'"></div></div>
+        <span class="day-value" th:text="${p.avgMinutes > 0} ? ${p.avgMinutes} + ' min' : 'no data'">0 min</span>
+    </div>
+</div>
+</body>
+</html>

@@ -19,15 +19,21 @@ public class ProgressController {
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
     private final CheckInRepository checkInRepository;
+    private final InsightsService insightsService;
+    private final ReflectionRepository reflectionRepository;
 
     public ProgressController(ProgressService progressService,
                               UserRepository userRepository,
                               ParticipationRepository participationRepository,
-                              CheckInRepository checkInRepository) {
+                              CheckInRepository checkInRepository,
+                              InsightsService insightsService,
+                              ReflectionRepository reflectionRepository) {
         this.progressService = progressService;
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
         this.checkInRepository = checkInRepository;
+        this.insightsService = insightsService;
+        this.reflectionRepository = reflectionRepository;
     }
 
     private User currentUser(Principal principal) {
@@ -49,6 +55,7 @@ public class ProgressController {
         model.addAttribute("totalGoalsMet", rows.stream()
                 .mapToInt(ProgressService.ProgressRow::getGoalsMet).sum());
         model.addAttribute("week", progressService.lastSevenDays(user));
+        model.addAttribute("heatmap", insightsService.heatmap(user));
         return "progress";
     }
 
@@ -74,8 +81,18 @@ public class ProgressController {
                 c.setNote("Demo data");
                 checkInRepository.save(c);
             }
+            boolean hasReflection = reflectionRepository.findByUserOrderByCreatedAtDesc(user).stream()
+                    .anyMatch(r -> r.getReflectionDate().equals(day));
+            if (!hasReflection) {
+                Reflection r = new Reflection();
+                r.setUser(user);
+                r.setReflectionDate(day);
+                r.setMood(i == 1 ? "Great" : i == 2 ? "Good" : i == 3 ? "Tough" : "Okay");
+                r.setContent("Demo reflection");
+                reflectionRepository.save(r);
+            }
         }
-        redirectAttributes.addFlashAttribute("message", "Demo check-ins added for the last 4 days.");
+        redirectAttributes.addFlashAttribute("message", "Demo check-ins and reflections added for the last 4 days.");
         return "redirect:/progress";
     }
 }

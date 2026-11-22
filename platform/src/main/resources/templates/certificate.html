@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Certificate</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/extras.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('progress')}"></div>
+<div class="container wide">
+    <div class="cert-actions no-print">
+        <button type="button" class="btn small" onclick="window.print()">Print or save as PDF</button>
+        <a class="btn small light" th:href="@{/progress}">Back to progress</a>
+    </div>
+
+    <div class="certificate">
+        <p class="cert-eyebrow">Digital Detox Challenge Platform</p>
+        <h1>Certificate of Completion</h1>
+        <p class="cert-meta">This certifies that</p>
+        <div class="cert-name" th:text="${name}">Student Name</div>
+        <p class="cert-meta">has successfully completed the challenge</p>
+        <p class="cert-challenge" th:text="${challenge.title}">Challenge</p>
+        <p class="cert-meta">
+            <span th:text="${challenge.category}">Category</span>
+            &middot; <span th:text="${challenge.durationDays}">7</span> days
+            &middot; goal met on <span th:text="${goalDays}">7</span> days
+        </p>
+        <p class="cert-meta" th:if="${startDate != ''}">
+            From <strong th:text="${startDate}">1 January 2026</strong>
+            to <strong th:text="${endDate}">7 January 2026</strong>
+        </p>
+        <div class="cert-foot">
+            <span>Issued on <span th:text="${issuedOn}">date</span></span>
+            <span>Certificate no. <span th:text="${certId}">DDC-1-1</span></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

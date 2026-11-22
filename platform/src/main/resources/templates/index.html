@@ -8,7 +8,8 @@
 </head>
 <body>
 <div class="container auth">
-    <a class="brand center" th:href="@{/}"><span class="logo"></span><span>Detox</span></a>
+    <a class="brand center" th:href="@{/}"><span class="logo"></span><span class="wordmark">detox</span></a>
+    <img class="mascot hero-mascot" th:src="@{/images/mascot.svg}" alt="">
     <h1 class="big">Take back your time.</h1>
     <p class="lead">Join detox challenges, build streaks, earn badges and compete with friends, one screen-free day at a time.</p>
 
@@ -22,5 +23,6 @@
     <a class="btn" th:href="@{/register}">Get started</a>
     <a class="btn light" th:href="@{/login}">I already have an account</a>
 </div>
+<script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>

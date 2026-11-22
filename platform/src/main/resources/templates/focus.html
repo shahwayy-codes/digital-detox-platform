@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Focus timer</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/extras.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('none')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Focus timer</h1>
+        <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+    <div class="alert danger" th:if="${error}" th:text="${error}"></div>
+
+    <div class="stats">
+        <div class="stat"><strong th:text="${todayMinutes}">0</strong>Focus minutes today</div>
+        <div class="stat"><strong th:text="${totalMinutes}">0</strong>Total focus minutes</div>
+        <div class="stat"><strong th:text="${totalSessions}">0</strong>Sessions completed</div>
+        <div class="stat"><strong th:text="${focusPoints}">0</strong>Points earned</div>
+    </div>
+
+    <div th:if="${active == null}">
+        <h2>Start a phone-down session</h2>
+        <p class="meta">Put your phone face down and leave it until the timer ends. Finished sessions earn points (1 point for every 5 minutes).</p>
+        <form th:action="@{/focus/start}" method="post">
+            <div class="focus-options">
+                <button type="submit" class="btn" name="minutes" th:each="m : ${options}" th:value="${m}"
+                        th:text="${m} + ' minutes'">15 minutes</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${active != null}" class="focus-active">
+        <p class="meta"><span th:text="${active.plannedMinutes}">30</span> minute session</p>
+        <div class="ring-wrap" th:attr="data-total=${active.plannedMinutes * 60}">
+            <svg class="ring" viewBox="0 0 260 260" aria-hidden="true">
+                <defs>
+                    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" style="stop-color:var(--brand)"/>
+                        <stop offset="1" style="stop-color:var(--brand-2)"/>
+                    </linearGradient>
+                </defs>
+                <circle class="ring-track" cx="130" cy="130" r="112"/>
+                <circle id="ringBar" class="ring-bar" cx="130" cy="130" r="112"/>
+            </svg>
+            <div id="timer" class="timer" th:attr="data-remaining=${remainingSeconds}">00:00</div>
+        </div>
+        <p id="timerHint" class="meta">Phone down. Keep this page open until the timer ends.</p>
+        <div class="focus-actions">
+            <form id="completeForm" class="hidden-form" th:action="@{/focus/complete}" method="post">
+                <button type="submit" class="btn">Finish session</button>
+            </form>
+            <form th:action="@{/focus/cancel}" method="post">
+                <button type="submit" class="btn light">Stop (no points)</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Recent sessions</h2>
+    <p th:if="${recent.isEmpty()}">No sessions yet. Start your first one above.</p>
+    <table th:if="${!recent.isEmpty()}">
+        <thead>
+            <tr><th>Started</th><th>Length</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="s : ${recent}">
+                <td th:text="${s.startedAtText}">date</td>
+                <td><span th:text="${s.plannedMinutes}">30</span> min</td>
+                <td>
+                    <span class="badge" th:if="${s.status == 'COMPLETED'}">Completed</span>
+                    <span class="badge no" th:if="${s.status == 'CANCELLED'}">Stopped</span>
+                    <span class="badge" th:if="${s.status == 'RUNNING'}">Running</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/js/focus.js}"></script>
+</body>
+</html>

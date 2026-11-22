@@ -41,6 +41,13 @@
             <label>Screen time today (minutes)</label>
             <input type="number" name="screenTimeMinutes" min="0" max="1440" required>
 
+            <label>What made you pick up your phone most today? (optional)</label>
+            <div class="chips">
+                <label class="chip" th:each="t : ${triggers}">
+                    <input type="radio" name="trigger" th:value="${t}"><span th:text="${t}">Boredom</span>
+                </label>
+            </div>
+
             <label>Note (optional)</label>
             <input type="text" name="note" maxlength="300">
 

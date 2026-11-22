@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weekly insights</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: navbar('progress')}"></div>
+<div class="container wide">
+    <div class="topbar">
+        <h1>Weekly insights</h1>
+        <div class="actions">
+            <a class="btn small light" th:href="@{/progress}">My progress</a>
+            <a class="btn small light" th:href="@{/dashboard}">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="coach" th:if="${!coach.isEmpty()}">
+        <strong>Your coach</strong>
+        <ul>
+            <li th:each="m : ${coach}" th:text="${m}">Message</li>
+        </ul>
+    </div>
+
+    <h2>Your week in numbers</h2>
+    <div class="stats">
+        <div class="stat"><strong data-static><span th:text="${weekly.daysMet}">0</span>/7</strong>Days goal met</div>
+        <div class="stat"><strong th:text="${weekly.avgThisWeek}">0</strong>Avg minutes per day</div>
+        <div class="stat" th:if="${weekly.hasGoal}"><strong data-static th:text="${weekly.reclaimedText}">0 min</strong>Reclaimed this month</div>
+    </div>
+    <div class="card">
+        <p th:each="line : ${weekly.lines}" th:text="${line}">Insight line</p>
+    </div>
+    <p class="meta">The week means the last 7 days including today. Screen time is averaged per day when you have more than one challenge.</p>
+
+    <h2>Mood versus screen time</h2>
+    <p class="meta">Average screen time on the days you wrote a reflection, grouped by the mood you chose.</p>
+    <div th:if="${!mood.hasData}" class="empty">
+        <p th:text="${mood.insight}">No data yet.</p>
+        <a class="btn small" th:href="@{/reflections}">Write a reflection</a>
+    </div>
+    <div th:if="${mood.hasData}">
+        <div class="day-row" th:each="r : ${mood.rows}">
+            <span class="day-label" th:text="${r.mood}">Great</span>
+            <div class="day-track"><div class="day-fill" th:style="'width:' + ${r.percent} + '%'"></div></div>
+            <span class="day-value" th:text="${r.count > 0} ? ${r.avgMinutes} + ' min' : 'no data'">0 min</span>
+        </div>
+        <div class="card">
+            <p th:text="${mood.insight}">Insight</p>
+        </div>
+    </div>
+
+    <h2>Phone triggers</h2>
+    <p class="meta">Why you picked up your phone, from the trigger you choose at check-in.</p>
+    <div th:if="${!triggers.hasData}" class="empty">
+        <p th:text="${triggers.insight}">No data yet.</p>
+        <a class="btn small" th:href="@{/checkin}">Go to check-in</a>
+    </div>
+    <div th:if="${triggers.hasData}">
+        <div class="day-row" th:each="r : ${triggers.rows}">
+            <span class="day-label wide-label" th:text="${r.name}">Boredom</span>
+            <div class="day-track"><div class="day-fill" th:style="'width:' + ${r.barPercent} + '%'"></div></div>
+            <span class="day-value" th:text="${r.count} + ' (' + ${r.percent} + '%)'">0</span>
+        </div>
+        <div class="card">
+            <p th:text="${triggers.insight}">Insight</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -8,7 +8,8 @@
 </head>
 <body>
 <div class="container auth">
-    <a class="brand center" th:href="@{/}"><span class="logo"></span><span>Detox</span></a>
+    <a class="brand center" th:href="@{/}"><span class="logo"></span><span class="wordmark">detox</span></a>
+    <img class="mascot sm" th:src="@{/images/mascot.svg}" alt="">
     <h1>Create account</h1>
     <form th:action="@{/register}" th:object="${registerForm}" method="post">
         <label for="fullName">Full name</label>
@@ -31,5 +32,6 @@
     </form>
     <p class="link-row">Already have an account? <a th:href="@{/login}">Log in</a></p>
 </div>
+<script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>

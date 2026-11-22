@@ -49,6 +49,7 @@ public class CheckInController {
         model.addAttribute("participations", participations);
         model.addAttribute("todayMap", todayMap);
         model.addAttribute("today", today.toString());
+        model.addAttribute("triggers", TriggerCalc.TRIGGERS);
         return "checkin";
     }
 
@@ -57,6 +58,7 @@ public class CheckInController {
                          @RequestParam boolean goalMet,
                          @RequestParam(required = false) Integer screenTimeMinutes,
                          @RequestParam(required = false) String note,
+                         @RequestParam(required = false) String trigger,
                          Principal principal,
                          RedirectAttributes redirectAttributes) {
 
@@ -88,6 +90,7 @@ public class CheckInController {
         checkIn.setGoalMet(goalMet);
         checkIn.setScreenTimeMinutes(screenTimeMinutes);
         checkIn.setNote(cleanNote);
+        checkIn.setTriggerTag(TriggerCalc.clean(trigger));
         checkInRepository.save(checkIn);
 
         redirectAttributes.addFlashAttribute("message", "Check-in saved. Nice work!");

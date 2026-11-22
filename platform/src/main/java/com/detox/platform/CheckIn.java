@@ -29,6 +29,9 @@ public class CheckIn {
     @Column(length = 300)
     private String note;
 
+    @Column(name = "trigger_tag", length = 40)
+    private String triggerTag;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() { return id; }
@@ -40,6 +43,8 @@ public class CheckIn {
     public void setGoalMet(boolean goalMet) { this.goalMet = goalMet; }
     public int getScreenTimeMinutes() { return screenTimeMinutes; }
     public void setScreenTimeMinutes(int screenTimeMinutes) { this.screenTimeMinutes = screenTimeMinutes; }
+    public String getTriggerTag() { return triggerTag; }
+    public void setTriggerTag(String triggerTag) { this.triggerTag = triggerTag; }
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
     public LocalDateTime getCreatedAt() { return createdAt; }
