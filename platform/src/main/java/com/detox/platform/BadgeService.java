@@ -54,13 +54,16 @@ public class BadgeService {
     private final ProgressService progressService;
     private final CheckInRepository checkInRepository;
     private final ReflectionRepository reflectionRepository;
+    private final FocusSessionRepository focusSessionRepository;
 
     public BadgeService(ProgressService progressService,
                         CheckInRepository checkInRepository,
-                        ReflectionRepository reflectionRepository) {
+                        ReflectionRepository reflectionRepository,
+                        FocusSessionRepository focusSessionRepository) {
         this.progressService = progressService;
         this.checkInRepository = checkInRepository;
         this.reflectionRepository = reflectionRepository;
+        this.focusSessionRepository = focusSessionRepository;
     }
 
     public Achievements evaluate(User user) {
@@ -74,7 +77,11 @@ public class BadgeService {
         boolean finished = rows.stream().anyMatch(r -> r.getGoalsMet() >= r.getDurationDays());
         boolean lightDay = checkIns.stream().anyMatch(c -> c.getScreenTimeMinutes() <= 120);
 
-        int points = totalCheckIns * 5 + goalsMet * 10 + (int) (reflections * 5);
+        int focusMinutes = focusSessionRepository.findByUserAndStatus(user, FocusSession.COMPLETED).stream()
+                .mapToInt(FocusSession::getPlannedMinutes).sum();
+
+        int points = totalCheckIns * 5 + goalsMet * 10 + (int) (reflections * 5)
+                + FocusRules.points(focusMinutes);
 
         List<Badge> badges = new ArrayList<>();
         badges.add(new Badge("First Step", "Complete your first daily check-in.", totalCheckIns >= 1));

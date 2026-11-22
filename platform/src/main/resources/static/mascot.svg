@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 184" role="img" aria-label="Zen, the detox mascot">
+  <ellipse cx="80" cy="172" rx="42" ry="7" fill="#000" opacity=".14"/>
+  <!-- sprout -->
+  <path d="M80 34 C80 24 80 20 80 14" stroke="#14935E" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M80 18 C66 8 52 12 50 24 C64 28 76 26 80 18Z" fill="#2DBE7E"/>
+  <path d="M80 14 C92 2 108 6 110 18 C96 22 84 22 80 14Z" fill="#22A96D"/>
+  <!-- arms and feet -->
+  <circle cx="28" cy="104" r="10" fill="#FFC21A"/>
+  <circle cx="132" cy="104" r="10" fill="#FFC21A"/>
+  <ellipse cx="60" cy="166" rx="14" ry="8" fill="#FFC21A"/>
+  <ellipse cx="100" cy="166" rx="14" ry="8" fill="#FFC21A"/>
+  <!-- body with 3D edge -->
+  <rect x="34" y="40" width="92" height="126" rx="28" fill="#1B47C2"/>
+  <rect x="34" y="34" width="92" height="126" rx="28" fill="#2F6BFF"/>
+  <rect x="45" y="46" width="70" height="104" rx="18" fill="#EEF4FF"/>
+  <rect x="64" y="52" width="32" height="5" rx="2.5" fill="#C5D5F5"/>
+  <!-- face -->
+  <path d="M59 90 q9 -11 18 0" stroke="#1B2340" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M83 90 q9 -11 18 0" stroke="#1B2340" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="56" cy="106" r="6.5" fill="#FF9DB0"/>
+  <circle cx="104" cy="106" r="6.5" fill="#FF9DB0"/>
+  <path d="M69 108 q11 13 22 0" stroke="#1B2340" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <!-- little heart on screen -->
+  <path d="M80 134 c-7 -6 -12 -10 -12 -15 a6 6 0 0 1 12 -2 a6 6 0 0 1 12 2 c0 5 -5 9 -12 15z" fill="#FF6B8B" opacity=".9"/>
+</svg>

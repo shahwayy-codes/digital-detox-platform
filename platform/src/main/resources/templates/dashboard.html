@@ -5,56 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/extras.css}">
 </head>
 <body>
 <div th:replace="~{fragments :: navbar('dashboard')}"></div>
 <main class="container wide">
 
-    <section class="hero">
-        <div>
-            <p class="eyebrow">Welcome back</p>
-            <h1>Hi, <span th:text="${user.fullName}">Name</span></h1>
-            <p class="hero-sub">Spend less time on your screen, one day at a time.</p>
-            <p class="hero-sub" th:if="${user.dailyScreenTimeGoal != null}">
-                Daily screen time goal: <strong th:text="${user.dailyScreenTimeGoal}">180</strong> min
+    <section class="greeting">
+        <img class="mascot" th:src="@{/images/mascot.svg}" alt="">
+        <div class="bubble">
+            <h1>Hi, <span th:text="${user.fullName}">Name</span>!</h1>
+            <p th:if="${coachMessages.isEmpty()}">Spend less time on your screen, one day at a time.</p>
+            <ul th:if="${!coachMessages.isEmpty()}">
+                <li th:each="m : ${coachMessages}" th:text="${m}">Message</li>
+            </ul>
+            <p class="meta" th:if="${user.dailyScreenTimeGoal != null}">
+                Daily goal: <strong th:text="${user.dailyScreenTimeGoal}">180</strong> min
                 &middot; <a th:href="@{/profile}">change</a>
             </p>
         </div>
-        <a class="btn" th:href="@{/checkin}">Daily check-in</a>
     </section>
 
-    <div class="alert warn" th:if="${pendingCheckIns > 0}">
-        Reminder: <strong th:text="${pendingCheckIns}">1</strong> of your challenges is waiting for today's check-in.
-        <a th:href="@{/checkin}">Check in now</a>
+    <div class="alert warn" data-keep th:if="${pendingCheckIns > 0}">
+        <strong th:text="${pendingCheckIns}">1</strong>
+        <span th:text="${pendingCheckIns == 1} ? 'challenge is' : 'challenges are'">challenge is</span>
+        waiting for today's check-in. <a th:href="@{/checkin}">Check in now</a>
     </div>
 
-    <h2>My challenges</h2>
-    <div class="empty" th:if="${participations.isEmpty()}">
-        <p>You have not joined any challenge yet.</p>
+    <section class="only-narrow" th:if="${navStats != null}">
+        <h2>Daily quests <small class="count"><span th:text="${navStats.questsDone}">0</span>/<span th:text="${navStats.questsTotal}">4</span></small></h2>
+        <div class="card quest-card">
+            <a class="quest" th:each="q : ${navStats.quests}" th:href="@{${q.link}}" th:classappend="${q.done} ? 'done'">
+                <span class="quest-check">✓</span>
+                <span class="quest-text"><b th:text="${q.title}">Quest</b><small th:text="${q.detail}">detail</small></span>
+                <span class="quest-icon" th:text="${q.icon}">✅</span>
+            </a>
+        </div>
+    </section>
+
+    <h2>Your path</h2>
+    <div class="empty" th:if="${navStats == null or navStats.rows.isEmpty()}">
+        <p>You have not joined any challenge yet. Pick one to start your path.</p>
         <a class="btn small" th:href="@{/challenges}">Browse challenges</a>
     </div>
 
-    <div class="card" th:each="p : ${participations}">
-        <div class="card-head">
-            <h3 th:text="${p.challenge.title}">Title</h3>
-            <span class="badge" th:text="${p.status}">ACTIVE</span>
-        </div>
-        <p class="meta"><span th:text="${p.challenge.durationDays}">7</span> days</p>
-        <a class="btn small" th:href="@{/challenges/{id}(id=${p.challenge.id})}">View</a>
-    </div>
-
-    <h2>Explore</h2>
-    <div class="tiles">
-        <a class="tile" th:href="@{/challenges}"><span class="emoji">🎯</span>Browse challenges</a>
-        <a class="tile" th:href="@{/progress}"><span class="emoji">📈</span>My progress and streaks</a>
-        <a class="tile" th:href="@{/achievements}"><span class="emoji">🏅</span>Badges and points</a>
-        <a class="tile" th:href="@{/groups}"><span class="emoji">👥</span>Friend groups</a>
-        <a class="tile" th:href="@{/reflections}"><span class="emoji">📝</span>Reflections</a>
-        <a class="tile" th:href="@{/tips}"><span class="emoji">💡</span>Tips and offline ideas</a>
-        <a class="tile" th:href="@{/history}"><span class="emoji">🕑</span>Check-in history</a>
-        <a class="tile" th:href="@{/profile}"><span class="emoji">⚙️</span>My profile</a>
-        <a class="tile" th:if="${isAdmin}" th:href="@{/admin/challenges}"><span class="emoji">🛠️</span>Admin panel</a>
-    </div>
+    <ol class="path" th:if="${navStats != null and !navStats.rows.isEmpty()}">
+        <li class="path-step" th:each="r, st : ${navStats.rows}" th:classappend="${r.goalsMet >= r.durationDays} ? 'complete' : (${r.checkedInToday} ? 'doneToday' : 'current')"
+            th:style="'--shift:' + ${(st.index % 4 == 1) ? 46 : ((st.index % 4 == 3) ? -46 : 0)} + 'px; --i:' + ${st.index}">
+            <span class="start-bubble" th:if="${!r.checkedInToday and r.goalsMet < r.durationDays}">CHECK IN</span>
+            <a class="node" th:href="@{/challenges/{id}(id=${r.challengeId})}" th:style="'--pct:' + ${r.percentComplete}"
+               th:title="${r.title}">
+                <span class="node-face" th:text="${r.goalsMet >= r.durationDays} ? '🏆' : (${r.checkedInToday} ? '✔️' : '🎯')">🎯</span>
+            </a>
+            <div class="path-info">
+                <strong th:text="${r.title}">Title</strong>
+                <small><span th:text="${r.goalsMet}">0</span>/<span th:text="${r.durationDays}">7</span> goal days
+                    &middot; 🔥 <span th:text="${r.currentStreak}">0</span></small>
+                <a class="btn small" th:if="${!r.checkedInToday and r.goalsMet < r.durationDays}" th:href="@{/checkin}">Check in</a>
+                <a class="btn small light" th:if="${r.goalsMet >= r.durationDays}" th:href="@{/certificate/{id}(id=${r.challengeId})}">Certificate</a>
+            </div>
+        </li>
+        <li class="path-step next" style="--shift:0px">
+            <a class="node dashed" th:href="@{/challenges}" aria-label="Join a new challenge"><span class="node-face">＋</span></a>
+            <div class="path-info"><strong>New challenge</strong><small>Add another step to your path</small></div>
+        </li>
+    </ol>
 </main>
 </body>
 </html>

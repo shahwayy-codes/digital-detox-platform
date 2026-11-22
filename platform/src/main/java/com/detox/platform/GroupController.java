@@ -22,16 +22,19 @@ public class GroupController {
     private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
     private final LeaderboardService leaderboardService;
+    private final GroupGoalService groupGoalService;
     private final SecureRandom random = new SecureRandom();
 
     public GroupController(FriendGroupRepository groupRepository,
                            GroupMemberRepository groupMemberRepository,
                            UserRepository userRepository,
-                           LeaderboardService leaderboardService) {
+                           LeaderboardService leaderboardService,
+                           GroupGoalService groupGoalService) {
         this.groupRepository = groupRepository;
         this.groupMemberRepository = groupMemberRepository;
         this.userRepository = userRepository;
         this.leaderboardService = leaderboardService;
+        this.groupGoalService = groupGoalService;
     }
 
     private User currentUser(Principal principal) {
@@ -118,6 +121,7 @@ public class GroupController {
         }
         model.addAttribute("group", group);
         model.addAttribute("entries", leaderboardService.weekly(group, user));
+        model.addAttribute("teamGoal", groupGoalService.weekly(group));
         model.addAttribute("isOwner", group.getOwner().getId().equals(user.getId()));
         return "group-details";
     }

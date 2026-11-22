@@ -20,6 +20,24 @@
     <p>Invite code: <span class="code" th:text="${group.inviteCode}">ABC123</span></p>
     <p class="meta">Share this code with friends so they can join from the Friend groups page.</p>
 
+    <h2>Team goal this week</h2>
+    <div class="card team-goal" th:classappend="${teamGoal.reached} ? 'reached'">
+        <div class="card-head">
+            <h3>Together we hit <span th:text="${teamGoal.doneDays}">0</span> of <span th:text="${teamGoal.targetDays}">0</span> goal days</h3>
+            <span class="badge" th:if="${teamGoal.reached}">Goal reached</span>
+        </div>
+        <div class="bar"><div class="bar-fill" th:style="'width:' + ${teamGoal.percent} + '%'"></div></div>
+        <p class="meta" th:if="${!teamGoal.reached}">
+            <span th:text="${teamGoal.remainingDays}">0</span> more goal days to go.
+            Each member counts for up to 5 goal days in the last 7 days.
+        </p>
+        <p class="meta" th:if="${teamGoal.reached}" data-celebrate>Great teamwork! Your group reached its weekly goal.</p>
+        <p class="meta" th:if="${teamGoal.reclaimedMinutes > 0}">
+            Screen time reclaimed together: <strong th:text="${teamGoal.reclaimedText}">0 min</strong>
+            compared with everyone's daily goals.
+        </p>
+    </div>
+
     <h2>Weekly leaderboard</h2>
     <p class="meta">Last 7 days. You get 5 points per check-in, plus 10 when you meet the goal.</p>
 

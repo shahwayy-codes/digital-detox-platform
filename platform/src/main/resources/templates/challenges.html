@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Challenges</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/extras.css}">
 </head>
 <body>
 <div th:replace="~{fragments :: navbar('challenges')}"></div>
@@ -25,6 +26,22 @@
         </select>
         <button type="submit" class="btn small">Search</button>
     </form>
+
+    <div class="recommend" th:if="${recommended != null and !recommended.isEmpty()}">
+        <h2>Recommended for you</h2>
+        <div class="recommend-grid">
+            <div class="card recommend-card" th:each="p : ${recommended}">
+                <div class="card-head">
+                    <h3 th:text="${p.title}">Title</h3>
+                    <span class="badge" th:text="${p.category}">Category</span>
+                </div>
+                <p class="meta"><span th:text="${p.durationDays}">7</span> days</p>
+                <p th:text="${p.reason}">Reason</p>
+                <a class="btn small" th:href="@{/challenges/{id}(id=${p.id})}">View details</a>
+            </div>
+        </div>
+        <h2>All challenges</h2>
+    </div>
 
     <p th:if="${challenges.isEmpty()}">No challenges match your search.</p>
 

@@ -8,7 +8,8 @@
 </head>
 <body>
 <div class="container auth">
-    <a class="brand center" th:href="@{/}"><span class="logo"></span><span>Detox</span></a>
+    <a class="brand center" th:href="@{/}"><span class="logo"></span><span class="wordmark">detox</span></a>
+    <img class="mascot sm" th:src="@{/images/mascot.svg}" alt="">
     <h1>Log in</h1>
     <div class="alert success" th:if="${registered}">Account created. Please log in.</div>
     <div class="alert success" th:if="${message}" th:text="${message}"></div>
@@ -24,5 +25,6 @@
     <p class="link-row"><a th:href="@{/forgot-password}">Forgot your password?</a></p>
     <p class="link-row">No account yet? <a th:href="@{/register}">Register</a></p>
 </div>
+<script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>

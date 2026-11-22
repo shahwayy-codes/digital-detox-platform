@@ -19,15 +19,18 @@ public class ChallengeController {
     private final ParticipationRepository participationRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final RecommendService recommendService;
 
     public ChallengeController(ChallengeRepository challengeRepository,
                                ParticipationRepository participationRepository,
                                UserRepository userRepository,
-                               CommentRepository commentRepository) {
+                               CommentRepository commentRepository,
+                               RecommendService recommendService) {
         this.challengeRepository = challengeRepository;
         this.participationRepository = participationRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.recommendService = recommendService;
     }
 
     private User currentUser(Principal principal) {
@@ -68,6 +71,9 @@ public class ChallengeController {
         model.addAttribute("q", q == null ? "" : q);
         model.addAttribute("selectedCategory", selected);
         model.addAttribute("joinedIds", joinedIds);
+        if (keyword.isEmpty() && selected.isEmpty()) {
+            model.addAttribute("recommended", recommendService.forUser(user, 3));
+        }
         return "challenges";
     }
 

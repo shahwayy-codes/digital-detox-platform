@@ -1,61 +1,93 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Fragments</title></head>
 <body>
+
+<!-- Page shell: left sidebar, top bar (phones and tablets), right panel with streak and quests -->
 <th:block th:fragment="navbar(active)">
-    <header class="appbar">
-        <div class="appbar-inner">
-            <a class="brand" th:href="@{/dashboard}"><span class="logo"></span><span>Detox</span></a>
 
-            <nav class="tabs desktop">
-                <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
-                <a th:href="@{/challenges}" th:classappend="${active == 'challenges'} ? 'active'">
-                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Challenges</a>
-                <a th:href="@{/checkin}" th:classappend="${active == 'checkin'} ? 'active'">
-                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Check-in</a>
-                <a th:href="@{/progress}" th:classappend="${active == 'progress'} ? 'active'">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/></svg>Progress</a>
-                <a th:href="@{/groups}" th:classappend="${active == 'groups'} ? 'active'">
-                    <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.6c1.8.8 3 2.6 3 5.4"/></svg>Groups</a>
-            </nav>
-
-            <details class="usermenu" th:if="${navUser != null}">
-                <summary>
-                    <span class="avatar" th:text="${#strings.toUpperCase(#strings.substring(navUser.fullName, 0, 1))}">A</span>
-                </summary>
-                <div class="menu">
-                    <div class="menu-head">
-                        <strong th:text="${navUser.fullName}">Name</strong>
-                        <span th:text="${navUser.email}">email</span>
-                    </div>
-                    <a th:href="@{/achievements}">Badges and points</a>
-                    <a th:href="@{/reflections}">Reflections</a>
-                    <a th:href="@{/history}">Check-in history</a>
-                    <a th:href="@{/tips}">Tips and offline ideas</a>
-                    <a th:href="@{/profile}">My profile</a>
-                    <a th:if="${navUser.role == 'ROLE_ADMIN'}" th:href="@{/admin/challenges}">Admin panel</a>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="menu-logout">Log out</button>
-                    </form>
-                </div>
-            </details>
+    <header class="mobilebar">
+        <button type="button" class="icon-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <a class="brand" th:href="@{/dashboard}"><span class="logo"></span><span class="wordmark">detox</span></a>
+        <div class="stat-chips" th:if="${navStats != null}">
+            <a class="chip-stat fire" th:href="@{/progress}" title="Current streak"><span>🔥</span><b th:text="${navStats.streak}">0</b></a>
+            <a class="chip-stat xp" th:href="@{/achievements}" title="Points"><span>⭐</span><b th:text="${navStats.points}">0</b></a>
         </div>
     </header>
 
-    <nav class="tabs mobile">
-        <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></a>
-        <a th:href="@{/challenges}" th:classappend="${active == 'challenges'} ? 'active'">
-            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span>Challenges</span></a>
-        <a th:href="@{/checkin}" th:classappend="${active == 'checkin'} ? 'active'">
-            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Check-in</span></a>
-        <a th:href="@{/progress}" th:classappend="${active == 'progress'} ? 'active'">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/></svg><span>Progress</span></a>
-        <a th:href="@{/groups}" th:classappend="${active == 'groups'} ? 'active'">
-            <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18.5 14.6c1.8.8 3 2.6 3 5.4"/></svg><span>Groups</span></a>
-    </nav>
+    <div class="scrim" id="scrim"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Main menu">
+        <a class="brand" th:href="@{/dashboard}"><span class="logo"></span><span class="wordmark">detox</span></a>
+
+        <nav class="side-nav">
+            <a class="side-link" th:classappend="${active == 'dashboard'} ? 'active'" th:href="@{/dashboard}"><span class="side-ico">🏠</span><span>Home</span></a>
+            <a class="side-link" th:classappend="${active == 'challenges'} ? 'active'" th:href="@{/challenges}"><span class="side-ico">🎯</span><span>Challenges</span></a>
+            <a class="side-link" th:classappend="${active == 'checkin'} ? 'active'" th:href="@{/checkin}"><span class="side-ico">✅</span><span>Check-in</span></a>
+            <a class="side-link" th:classappend="${active == 'progress'} ? 'active'" th:href="@{/progress}"><span class="side-ico">📈</span><span>Progress</span></a>
+            <a class="side-link" th:classappend="${active == 'groups'} ? 'active'" th:href="@{/groups}"><span class="side-ico">👥</span><span>Friends</span></a>
+            <p class="side-title">Tools</p>
+            <a class="side-link" th:href="@{/focus}"><span class="side-ico">⏱️</span><span>Focus timer</span></a>
+            <a class="side-link" th:href="@{/insights}"><span class="side-ico">🔍</span><span>Insights</span></a>
+            <a class="side-link" th:href="@{/achievements}"><span class="side-ico">🏅</span><span>Badges</span></a>
+            <a class="side-link" th:href="@{/reflections}"><span class="side-ico">📝</span><span>Reflections</span></a>
+            <a class="side-link" th:href="@{/tips}"><span class="side-ico">💡</span><span>Tips</span></a>
+        </nav>
+
+        <div class="side-foot" th:if="${navUser != null}">
+            <a class="side-user" th:href="@{/profile}">
+                <span class="avatar" th:text="${#strings.toUpperCase(#strings.substring(navUser.fullName, 0, 1))}">S</span>
+                <span class="side-user-text">
+                    <strong th:text="${navUser.fullName}">Name</strong>
+                    <small th:text="${navUser.email}">email</small>
+                </span>
+            </a>
+            <div class="side-tools">
+                <button type="button" class="icon-btn" id="paletteBtn" aria-label="Open quick search">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <span class="kbd">Ctrl K</span>
+                </button>
+                <button type="button" class="icon-btn theme-toggle" id="themeToggle" aria-label="Switch theme">
+                    <svg class="ico sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                    <svg class="ico moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+                </button>
+            </div>
+            <a class="side-link small" th:href="@{/history}"><span class="side-ico">🕑</span><span>Check-in history</span></a>
+            <a class="side-link small" th:if="${navUser.role == 'ROLE_ADMIN'}" th:href="@{/admin/challenges}"><span class="side-ico">🛠️</span><span>Admin panel</span></a>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="side-link small logout menu-logout"><span class="side-ico">🚪</span><span>Log out</span></button>
+            </form>
+        </div>
+    </aside>
+
+    <aside class="rail" th:if="${navStats != null}" aria-label="Your day">
+        <div class="rail-chips">
+            <a class="chip-stat fire" th:href="@{/progress}" title="Current streak"><span>🔥</span><b th:text="${navStats.streak}">0</b></a>
+            <a class="chip-stat xp" th:href="@{/achievements}" title="Points"><span>⭐</span><b th:text="${navStats.points}">0</b></a>
+            <a class="chip-stat lvl" th:href="@{/achievements}" title="Level"><span>🏆</span><b th:text="'Lv ' + ${navStats.level}">Lv 1</b></a>
+        </div>
+
+        <section class="rail-card">
+            <div class="rail-title"><span>Level <b th:text="${navStats.level}">1</b></span><small><span th:text="${navStats.pointsToNext}">0</span> points to go</small></div>
+            <div class="bar"><div class="bar-fill" th:style="'width:' + ${navStats.levelPercent} + '%'"></div></div>
+        </section>
+
+        <section class="rail-card">
+            <div class="rail-title"><span>Daily quests</span><small><span th:text="${navStats.questsDone}">0</span>/<span th:text="${navStats.questsTotal}">4</span> done</small></div>
+            <a class="quest" th:each="q : ${navStats.quests}" th:href="@{${q.link}}" th:classappend="${q.done} ? 'done'">
+                <span class="quest-check">✓</span>
+                <span class="quest-text"><b th:text="${q.title}">Quest</b><small th:text="${q.detail}">detail</small></span>
+                <span class="quest-icon" th:text="${q.icon}">✅</span>
+            </a>
+        </section>
+    </aside>
+
+    <a class="fab" th:if="${navStats != null and navStats.pendingCheckIns > 0}" th:href="@{/checkin}"><span>✅</span> Check in</a>
 
     <script th:src="@{/js/app.js}" defer></script>
 </th:block>
+
 </body>
 </html>

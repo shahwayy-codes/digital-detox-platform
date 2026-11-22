@@ -13,13 +13,16 @@ public class HomeController {
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
     private final CheckInRepository checkInRepository;
+    private final InsightsService insightsService;
 
     public HomeController(UserRepository userRepository,
                           ParticipationRepository participationRepository,
-                          CheckInRepository checkInRepository) {
+                          CheckInRepository checkInRepository,
+                          InsightsService insightsService) {
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
         this.checkInRepository = checkInRepository;
+        this.insightsService = insightsService;
     }
 
     @GetMapping("/")
@@ -44,6 +47,7 @@ public class HomeController {
         model.addAttribute("isAdmin", "ROLE_ADMIN".equals(user.getRole()));
         model.addAttribute("participations", participations);
         model.addAttribute("pendingCheckIns", pending);
+        model.addAttribute("coachMessages", insightsService.coachMessages(user));
         return "dashboard";
     }
 }
